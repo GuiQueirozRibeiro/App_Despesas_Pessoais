@@ -1,7 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.GuilhermeQueiroz.despesas">
-   <application
-        android:label="Despesas"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Permissões necessárias para geolocalização (geolocator) + mapa
+         OpenStreetMap (precisa de INTERNET para baixar os tiles). -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:label="Tarefas Geo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

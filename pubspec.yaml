@@ -1,38 +1,50 @@
-name: my_app
-description: A new Flutter project.
+name: tarefas_geo
+description: "Tarefas Geo — gerenciador de tarefas com geolocalização. Projeto da Pós-Graduação em Desenvolvimento Mobile (disciplina: Desenvolvimento Mobile com Flutter)."
 
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.18.1
+  flutter_localizations:
+    sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.6
+  intl: ^0.20.2
+
+  # Gerenciamento de estado (rubrica item 3).
+  provider: ^6.1.2
+
+  # GPS + permissões nativas (rubrica item 4).
+  geolocator: ^13.0.1
+
+  # Mapa OpenStreetMap (sem necessidade de API key — funciona out-of-the-box).
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icons/icon.png"
-  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_background: "#7E57C2"
   adaptive_icon_foreground: "assets/icons/icon-adaptive.png"
   remove_alpha_ios: true
-
-  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/waiting.png
+    - assets/images/
 
   fonts:
     - family: OpenSans

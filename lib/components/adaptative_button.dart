@@ -20,15 +20,31 @@ class AdaptativeButton extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
+              vertical: 12,
             ),
-            child: Text(label),
+            child: Text(
+              label,
+              // CupertinoButton herda a cor do tema (roxo no nosso caso),
+              // o que deixaria o texto invisível sobre o fundo roxo.
+              // Força branco para garantir contraste.
+              style: const TextStyle(
+                color: Colors.white,
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           )
         : ElevatedButton(
             onPressed: onPressed,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Colors.white,
+            ),
             child: Text(
               label,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.labelLarge?.color,
+              style: const TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
               ),
             ),
           );
