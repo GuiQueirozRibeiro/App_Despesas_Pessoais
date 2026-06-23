@@ -13,12 +13,13 @@ import 'task_item.dart';
 ///     confortável em tablets/web
 ///   - Estado vazio mostra ilustração centralizada
 class TaskList extends StatelessWidget {
-  final void Function(Task) onEdit;
+  /// Chamado ao tocar numa tarefa — abre a tela de detalhe.
+  final void Function(Task) onOpen;
   final void Function(String) onRemove;
 
   const TaskList({
     Key? key,
-    required this.onEdit,
+    required this.onOpen,
     required this.onRemove,
   }) : super(key: key);
 
@@ -53,7 +54,7 @@ class TaskList extends StatelessWidget {
                       onDismissed: (_) => onRemove(task.id),
                       child: TaskItem(
                         task: task,
-                        onTap: () => onEdit(task),
+                        onTap: () => onOpen(task),
                         onRemove: () async {
                           final ok = await _confirmDelete(context, task);
                           if (ok ?? false) onRemove(task.id);

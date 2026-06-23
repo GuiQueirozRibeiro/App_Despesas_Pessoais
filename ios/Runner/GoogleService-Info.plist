@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1012897877829-0k81l4sqra0ree12g9u6o37rho2gkjk6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1012897877829-0k81l4sqra0ree12g9u6o37rho2gkjk6</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1012897877829-od8k73hqquvuf6c2f7mebefb201nge4d.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDQ6195neHaTo_EiILa9NYWD_5ZYh2dGT0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1012897877829</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>br.com.guilhermeribeiro.tarefasgeo</string>
+	<key>PROJECT_ID</key>
+	<string>despesas-pessoais-76cbd</string>
+	<key>STORAGE_BUCKET</key>
+	<string>despesas-pessoais-76cbd.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1012897877829:ios:62735545aac121e9aff82c</string>
+	<key>DATABASE_URL</key>
+	<string>https://despesas-pessoais-76cbd-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

@@ -103,20 +103,6 @@ class _TaskFormState extends State<TaskForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ── Header com título ────────────────────────────────────────
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  widget.isEditing ? 'Editar Tarefa' : 'Nova Tarefa',
-                  style: const TextStyle(
-                    fontFamily: 'OpenSans',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-
               // ── Nome ─────────────────────────────────────────────────────
               AdaptativeTextField(
                 label: 'Nome da tarefa',

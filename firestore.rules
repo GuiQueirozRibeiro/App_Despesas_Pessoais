@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─────────────────────────────────────────────────────────────────────
+    // App "Tarefas Geo" — coleção de tarefas.
+    //
+    // MODO TESTE: leitura e escrita liberadas SEM autenticação. Adequado para
+    // a avaliação acadêmica desta disciplina (dados não-sensíveis, sem login).
+    //
+    // ⚠️ NÃO use estas regras em produção. Para fechar o acesso, exija
+    //    autenticação, por exemplo:
+    //        allow read, write: if request.auth != null;
+    // ─────────────────────────────────────────────────────────────────────
+    match /tasks/{taskId} {
+      allow read, write: if true;
+    }
+
+    // Qualquer outra coleção permanece bloqueada por padrão.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

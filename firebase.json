@@ -1,0 +1,34 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "despesas-pessoais-76cbd",
+          "appId": "1:1012897877829:android:559acf302af75924aff82c",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "despesas-pessoais-76cbd",
+          "appId": "1:1012897877829:ios:62735545aac121e9aff82c",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "despesas-pessoais-76cbd",
+          "configurations": {
+            "android": "1:1012897877829:android:559acf302af75924aff82c",
+            "ios": "1:1012897877829:ios:62735545aac121e9aff82c"
+          }
+        }
+      }
+    }
+  }
+}

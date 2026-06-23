@@ -1,0 +1,18 @@
+name: geo_tools
+description: >
+  Pacote interno de utilitários de geolocalização: cliente da API REST do
+  OpenWeather, cálculo de distância (Haversine) e formatação de coordenadas.
+  Desenvolvido para o projeto Tarefas Geo (Pós-Graduação em Desenvolvimento Mobile).
+version: 1.0.0
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  http: ^1.2.2
+  meta: ^1.15.0
+
+dev_dependencies:
+  test: ^1.25.8
+  lints: ^4.0.0

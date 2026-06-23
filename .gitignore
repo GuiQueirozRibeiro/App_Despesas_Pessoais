@@ -13,6 +13,9 @@ lib/generated_plugin_registrant.dart
 app.*.symbols
 app.*.map.json
 
+# Cobertura de testes (gerado por `flutter test --coverage`)
+coverage/
+
 # ==========================================
 # Android
 # ==========================================

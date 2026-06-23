@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "1012897877829",
+    "firebase_url": "https://despesas-pessoais-76cbd-default-rtdb.firebaseio.com",
+    "project_id": "despesas-pessoais-76cbd",
+    "storage_bucket": "despesas-pessoais-76cbd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012897877829:android:01524e926b1a6b60aff82c",
+        "android_client_info": {
+          "package_name": "br.com.guilhermequeiroz.despesaspessoais"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012897877829-od8k73hqquvuf6c2f7mebefb201nge4d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.guilhermequeiroz.despesaspessoais",
+            "certificate_hash": "a4738d9a61f6506cb0058e107990f9e51dad4e3a"
+          }
+        },
+        {
+          "client_id": "1012897877829-s90b7gieuqg3evsucd83lm3i97294h4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUARwkDV-jLDGdYd_qM7lImTUHEdSfAjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012897877829-s90b7gieuqg3evsucd83lm3i97294h4e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012897877829:android:559acf302af75924aff82c",
+        "android_client_info": {
+          "package_name": "br.com.guilhermeribeiro.tarefasgeo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012897877829-s90b7gieuqg3evsucd83lm3i97294h4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUARwkDV-jLDGdYd_qM7lImTUHEdSfAjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012897877829-s90b7gieuqg3evsucd83lm3i97294h4e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,171 +1,225 @@
-# Tarefas Geo — App de Lista de Tarefas com Geolocalização
+# Tarefas Geo — Tarefas com Localização e Clima
 
 > **Pós-Graduação em Desenvolvimento Mobile**
 > **Disciplina:** Desenvolvimento Mobile com Flutter
 > **Aluno:** Guilherme Queiroz Ribeiro
-> **Professor:** Thiago Aguiar
 
-Aplicativo Flutter (Android e iOS) que gerencia uma lista de tarefas. Cada tarefa
-possui **nome**, **data e hora** e, opcionalmente, uma **geolocalização** capturada
-do GPS do dispositivo. O armazenamento é feito **em memória**, conforme o
-enunciado do trabalho.
+Aplicativo Flutter (Android e iOS) para gerenciar tarefas com **data/hora** e
+**localização**. As tarefas são salvas no **Cloud Firestore** (sincronização em
+tempo real) e, na tela de detalhe, o app mostra o **clima atual** no local da
+tarefa (API REST do **OpenWeather**) e calcula a **distância** a partir da
+posição do usuário (GPS).
 
-> Este repositório nasceu como `App_Despesas_Pessoais` (um trabalho anterior em
-> Flutter) e foi **refatorado** para atender ao escopo de gestão de tarefas com
-> geolocalização. O design adaptativo iOS/Android (Material + Cupertino), a
-> paleta de cores (roxo + âmbar) e a tipografia OpenSans foram preservados.
+> Este repositório nasceu como `App_Despesas_Pessoais` e foi **refatorado** para
+> atender ao escopo desta entrega. A paleta (roxo + âmbar), a tipografia
+> (OpenSans) e o design adaptativo iOS/Android foram preservados.
 
 ---
 
 ## Sumário
 
-- [Funcionalidades](#funcionalidades)
-- [Capturas de Tela](#capturas-de-tela)
-- [Cobertura dos Critérios da Rubrica](#cobertura-dos-critérios-da-rubrica)
+- [Requisitos atendidos](#requisitos-atendidos)
 - [Arquitetura](#arquitetura)
-- [Como Executar](#como-executar)
-- [Dependências](#dependências)
-- [Permissões Nativas](#permissões-nativas)
+- [Como executar](#como-executar)
+- [Como testar (documentação da rubrica)](#como-testar)
+  - [Testes e cobertura](#testes-e-cobertura)
+  - [Firebase](#como-testar-a-solução-firebase)
+  - [API externa (OpenWeather)](#como-testar-o-consumo-da-api-externa)
+  - [Package interno (geo_tools)](#como-testar-o-package-interno)
+  - [Testes de interface](#testes-de-interface)
+- [Build iOS e Android](#build-ios-e-android)
+- [Permissões nativas](#permissões-nativas)
+- [Evidências](#evidências)
 
 ---
 
-## Funcionalidades
+## Requisitos atendidos
 
-- **Criar tarefa** com nome, data, hora e (opcionalmente) localização do GPS.
-- **Listar tarefas** ordenadas por data/hora mais próxima.
-- **Editar tarefa** existente reabrindo o mesmo formulário.
-- **Excluir tarefa** via *swipe* (Dismissible) com confirmação.
-- **Capturar GPS** do dispositivo (alta precisão, com tratamento de permissões).
-- **Pré-visualizar localização** em mapa interativo (OpenStreetMap, sem chave de API).
-- **UI adaptativa**: Material no Android e Cupertino no iOS.
-- **Responsivo**: layout se ajusta a celular, tablet e orientação paisagem.
-- **Localização pt-BR** para datas e *pickers* nativos.
-
----
-
-## Capturas de Tela
-
-> As imagens abaixo ficam em [`assets/screenshots/`](assets/screenshots/) e devem
-> ser geradas executando o app antes da entrega.
-
-| Lista vazia | Lista preenchida | Formulário de criação |
+| # | Requisito do enunciado | Como foi atendido |
 |---|---|---|
-| ![Vazio](assets/screenshots/01-empty.png) | ![Lista](assets/screenshots/02-list.png) | ![Form](assets/screenshots/03-form.png) |
-
-| Captura de GPS | Mapa pré-visualizado | Excluir tarefa |
-|---|---|---|
-| ![GPS](assets/screenshots/04-gps.png) | ![Mapa](assets/screenshots/05-map.png) | ![Excluir](assets/screenshots/06-delete.png) |
-
----
-
-## Cobertura dos Critérios da Rubrica
-
-A disciplina avalia **16 critérios** distribuídos em 4 grupos. A tabela abaixo
-mapeia cada critério à(s) tela(s)/arquivo(s) que comprovam o atendimento.
-
-### 1 — Apps Flutter simples (4 critérios)
-
-| Critério | Onde está |
-|---|---|
-| Interface de criação | [`lib/components/task_form.dart`](lib/components/task_form.dart) (aberta via `_openTaskFormModal`) |
-| Interface de exclusão | [`lib/components/task_list.dart`](lib/components/task_list.dart) (Dismissible + diálogo) e [`lib/components/task_item.dart`](lib/components/task_item.dart) |
-| Interface de edição | [`lib/components/task_form.dart`](lib/components/task_form.dart) reaproveitado com parâmetro `existing` |
-| Interface de listagem | [`lib/components/task_list.dart`](lib/components/task_list.dart) e [`lib/components/task_item.dart`](lib/components/task_item.dart) |
-
-### 2 — Layouts responsivos (4 critérios)
-
-| Critério | Onde está |
-|---|---|
-| Layout responsivo na criação | [`lib/components/task_form.dart`](lib/components/task_form.dart) usa `SingleChildScrollView` + `viewInsets.bottom` para teclado |
-| Layout responsivo na exclusão | [`lib/components/task_item.dart`](lib/components/task_item.dart) alterna entre `TextButton` (largo) e `IconButton` (estreito) via `LayoutBuilder` |
-| Layout responsivo na edição | mesmo formulário responsivo de criação |
-| Layout responsivo na listagem | [`lib/components/task_list.dart`](lib/components/task_list.dart) com `LayoutBuilder` + `ConstrainedBox(maxWidth: 720)` |
-
-### 3 — Gerenciamento de estado (4 critérios)
-
-`Provider` (ChangeNotifier) centraliza o estado e a UI reage automaticamente.
-
-| Critério | Onde está |
-|---|---|
-| Estado na criação | [`lib/providers/task_provider.dart`](lib/providers/task_provider.dart) → `add()` |
-| Estado na exclusão | [`lib/providers/task_provider.dart`](lib/providers/task_provider.dart) → `remove()` |
-| Estado na edição | [`lib/providers/task_provider.dart`](lib/providers/task_provider.dart) → `update()` |
-| Estado na listagem | `Consumer<TaskProvider>` em [`lib/components/task_list.dart`](lib/components/task_list.dart) |
-
-### 4 — Geolocalização e mapas (4 critérios)
-
-| Critério | Onde está |
-|---|---|
-| GPS do dispositivo | [`lib/services/location_service.dart`](lib/services/location_service.dart) usando `geolocator` |
-| Inserção do GPS na criação | [`lib/components/adaptative_location_picker.dart`](lib/components/adaptative_location_picker.dart) embutido no form |
-| Inserção do GPS na edição | mesmo picker, reaproveitado pelo `TaskForm` |
-| Visualização em mapa na listagem | [`lib/components/adaptative_location_picker.dart`](lib/components/adaptative_location_picker.dart) com `flutter_map` (OpenStreetMap) — exibido no form e o item da lista mostra rótulo + coordenadas |
+| 1 | Responsividade iOS/Android | Widgets adaptativos (`Platform.isIOS` → Material/Cupertino) + `LayoutBuilder`/`ConstrainedBox` |
+| 2 | Flutter ≥ 2.5 | Flutter 3.41 / Dart 3.11 (SDK `>=3.0.0`) |
+| 3 | Rotas | Rotas nomeadas via `onGenerateRoute` em [`lib/routes/app_routes.dart`](lib/routes/app_routes.dart) (Home, Form, Detalhe, Sobre) |
+| 4 | Gerenciamento de estado | `Provider` + `ChangeNotifier` em [`lib/providers/task_provider.dart`](lib/providers/task_provider.dart) |
+| 5 | ≥ 50% de testes unitários | **56,5%** de cobertura no app + 24 testes no package (ver [Testes](#testes-e-cobertura)) |
+| 6 | Testes de interface | Widget tests em [`test/widgets/`](test/widgets/) + [`integration_test/`](integration_test/) |
+| 7 | API externa (REST) | Cliente **OpenWeather** em [`packages/geo_tools/lib/src/weather_client.dart`](packages/geo_tools/lib/src/weather_client.dart) |
+| 8 | API do aparelho | GPS via `geolocator` em [`lib/services/location_service.dart`](lib/services/location_service.dart) |
+| 9 | Firebase | **Cloud Firestore** como fonte de verdade (repositório + stream em tempo real) |
+| 10 | Package interno | [`packages/geo_tools`](packages/geo_tools) (cliente OpenWeather + Haversine + formatação) |
+| 11 | Compila iOS/Android | iOS validado no simulador; Android configurado (ver [Build](#build-ios-e-android)) |
 
 ---
 
 ## Arquitetura
 
+Organização em camadas (domínio / dados / apresentação):
+
 ```
 lib/
-├── main.dart                            # Bootstrap, tema, locale, Provider
-├── models/
-│   └── task.dart                        # Entidade Task (id, nome, data, lat, lng)
-├── providers/
-│   └── task_provider.dart               # ChangeNotifier (in-memory CRUD)
-├── services/
-│   └── location_service.dart            # Camada de acesso ao GPS
-└── components/
-    ├── adaptative_button.dart           # Botão iOS/Android
-    ├── adaptative_text_field.dart       # Campo de texto iOS/Android
-    ├── adaptative_date_time_picker.dart # Picker de data e hora adaptativo
-    ├── adaptative_location_picker.dart  # Picker de GPS + preview em mapa
-    ├── task_form.dart                   # Form único de criação/edição
-    ├── task_item.dart                   # Card de uma tarefa
-    └── task_list.dart                   # Lista responsiva com swipe-to-delete
+├── main.dart                       # Bootstrap: Firebase + Provider + MaterialApp/rotas
+├── firebase_options.dart           # Gerado pelo flutterfire configure
+├── config/app_config.dart          # Chave da API (via --dart-define)
+├── models/task.dart                # Entidade Task (domínio puro, sem Firebase)
+├── repositories/
+│   ├── task_repository.dart        # Interface (contrato)
+│   └── firestore_task_repository.dart  # Implementação Firestore
+├── providers/task_provider.dart    # Estado (ChangeNotifier) que escuta o repositório
+├── services/location_service.dart  # Acesso ao GPS
+├── routes/app_routes.dart          # Rotas nomeadas (onGenerateRoute)
+├── screens/                        # Home, Form, Detalhe (mapa+clima), Sobre
+└── components/                     # Widgets adaptativos reutilizáveis
+
+packages/
+└── geo_tools/                      # PACKAGE INTERNO (Dart puro)
+    ├── lib/src/weather_client.dart # Cliente REST OpenWeather (API externa)
+    ├── lib/src/haversine.dart      # Distância entre coordenadas
+    ├── lib/src/coordinate_format.dart
+    └── lib/src/weather.dart / geo_point.dart
 ```
 
-- **Padrão adaptativo**: cada widget verifica `Platform.isIOS` e troca entre
-  Material e Cupertino. Mantém uma única árvore de widgets para os dois sistemas.
-- **Persistência**: somente em memória (`List<Task>` no `TaskProvider`). Reiniciar
-  o app limpa as tarefas — comportamento intencional, conforme enunciado.
-- **Sem backend**: o mapa usa *tiles* públicos do OpenStreetMap, então o app
-  funciona sem nenhuma chave de API.
+**Decisões-chave:**
+- A entidade `Task` **não importa** `cloud_firestore`. A conversão
+  `Task ↔ Firestore` (incluindo `DateTime ↔ Timestamp`) fica isolada no
+  `FirestoreTaskRepository`. Isso desacopla o domínio do backend e mantém os
+  testes da entidade independentes do Firebase.
+- O repositório expõe um `Stream<List<Task>>` (`.snapshots()`); o `TaskProvider`
+  escuta esse stream — qualquer alteração na nuvem reflete na UI automaticamente.
+- O `TarefasGeoApp` **recebe o repositório por parâmetro**, o que permite injetar
+  um Firestore em memória (`fake_cloud_firestore`) nos testes de integração.
 
 ---
 
-## Como Executar
+## Como executar
 
-Pré-requisitos: Flutter 3.0+ e um dispositivo/emulador Android ou iOS com GPS.
+**Pré-requisitos:** Flutter 3.x, um emulador/simulador ou device, e uma chave
+gratuita do OpenWeather (https://openweathermap.org/api).
 
 ```bash
 flutter pub get
-flutter run
+
+# A chave da API é injetada em tempo de compilação (nunca é commitada):
+flutter run --dart-define=OPENWEATHER_API_KEY=SUA_CHAVE_AQUI
 ```
 
-Para gerar APK de release:
+> Sem a chave, o app funciona normalmente; apenas a seção de clima exibe um aviso
+> amigável de que a chave não foi configurada.
+
+> **Dica (emulador):** envie uma coordenada pelo painel de localização do
+> emulador/simulador antes de tocar em "Usar minha localização".
+
+---
+
+## Como testar
+
+### Testes e cobertura
 
 ```bash
-flutter build apk --release
+# Testes do app (unitários + widget) com cobertura
+flutter test --coverage
+
+# Cobertura total (lib/ do app): 56,5%
+# Relatório HTML (opcional, requer lcov):
+genhtml coverage/lcov.info -o coverage/html && open coverage/html/index.html
 ```
 
-> **Dica para o emulador**: no Android Studio, abra *Extended Controls* →
-> *Location* e envie uma coordenada manualmente antes de tocar em
-> "Usar localização atual" no app.
+| Camada | Arquivo de teste | Cobertura |
+|---|---|---|
+| Entidade `Task` | [`test/models/task_test.dart`](test/models/task_test.dart) | 100% |
+| `TaskProvider` | [`test/providers/task_provider_test.dart`](test/providers/task_provider_test.dart) | 100% |
+| Repositório Firestore | [`test/repositories/firestore_task_repository_test.dart`](test/repositories/firestore_task_repository_test.dart) | 100% |
+| Telas e widgets | [`test/widgets/`](test/widgets/) | parcial |
+| Rotas | [`test/routes/app_routes_test.dart`](test/routes/app_routes_test.dart) | — |
+
+### Como testar a solução Firebase
+
+A persistência usa **Cloud Firestore**. Os testes **não precisam de rede**: usam
+`fake_cloud_firestore` (um Firestore em memória).
+
+```bash
+flutter test test/repositories/firestore_task_repository_test.dart
+```
+
+Esses testes cobrem `add`, `watchTasks` (stream), `update`, `delete` e o
+*round-trip* de `DateTime ↔ Timestamp`.
+
+**Para testar contra o Firebase real:**
+1. O projeto já está conectado ao Firebase `despesas-pessoais-76cbd` (ver
+   [`lib/firebase_options.dart`](lib/firebase_options.dart)).
+2. O Firestore está habilitado (região `southamerica-east1`) com as regras de
+   [`firestore.rules`](firestore.rules) (modo teste — ver aviso abaixo).
+3. Rode o app, crie uma tarefa e verifique a coleção `tasks` no
+   [Console do Firebase](https://console.firebase.google.com/project/despesas-pessoais-76cbd/firestore).
+
+> ⚠️ **Regras de segurança:** a coleção `tasks` está em **modo teste**
+> (`allow read, write: if true`), adequado para esta avaliação com dados não
+> sensíveis. Para produção, exija autenticação (`if request.auth != null`).
+
+### Como testar o consumo da API externa
+
+O cliente da API REST do OpenWeather fica no package `geo_tools`. Os testes usam
+um `MockClient` (do pacote `http`), então **validam o consumo da API sem fazer
+chamadas reais**:
+
+```bash
+cd packages/geo_tools
+dart test test/weather_client_test.dart
+```
+
+Cobrem: resposta HTTP 200 (com verificação dos parâmetros da query), 401 (chave
+inválida), 500, falha de rede e decodificação UTF-8 dos acentos.
+
+### Como testar o package interno
+
+```bash
+cd packages/geo_tools
+dart pub get
+dart test          # 24 testes cobrindo todos os módulos
+```
+
+Detalhes em [`packages/geo_tools/README.md`](packages/geo_tools/README.md).
+
+### Testes de interface
+
+```bash
+# Widget tests (rodam sem device)
+flutter test test/widgets/
+
+# Integration test end-to-end (precisa de simulador/emulador)
+flutter test integration_test/app_test.dart
+```
+
+O integration test executa o fluxo completo: criar → listar → abrir detalhe →
+excluir, além da navegação para a tela "Sobre".
 
 ---
 
-## Dependências
+## Build iOS e Android
 
-| Pacote | Uso |
-|---|---|
-| `provider` | Gerenciamento de estado |
-| `geolocator` | Captura de coordenadas GPS + permissões |
-| `flutter_map` + `latlong2` | Mapa interativo (OpenStreetMap) |
-| `flutter_localizations` + `intl` | Localização pt-BR e formatação de datas |
+### iOS (validado)
+
+```bash
+flutter build ios --simulator        # build para simulador (sem assinatura)
+flutter build ipa                    # build de distribuição (requer signing)
+```
+
+### Android (configurado)
+
+O projeto está **configurado para Android** (Gradle 8 / AGP 8.11, plugin do
+Firebase, `google-services.json`, manifesto e permissões). Para compilar, é
+necessário o Android SDK instalado:
+
+```bash
+flutter build apk --release --dart-define=OPENWEATHER_API_KEY=SUA_CHAVE
+flutter build appbundle --release --dart-define=OPENWEATHER_API_KEY=SUA_CHAVE
+```
+
+- **Application ID / Bundle ID:** `br.com.guilhermeribeiro.tarefasgeo` (iOS e Android)
+- **minSdk:** 23 (exigido pelos plugins Firebase) · **iOS deployment target:** 13.0
 
 ---
 
-## Permissões Nativas
+## Permissões nativas
 
 **Android** — [`android/app/src/main/AndroidManifest.xml`](android/app/src/main/AndroidManifest.xml)
 
@@ -175,18 +229,17 @@ flutter build apk --release
 <uses-permission android:name="android.permission.INTERNET"/>
 ```
 
-**iOS** — [`ios/Runner/Info.plist`](ios/Runner/Info.plist)
+**iOS** — [`ios/Runner/Info.plist`](ios/Runner/Info.plist): `NSLocationWhenInUseUsageDescription`.
 
-```xml
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>Precisamos da sua localização para registrar o local da tarefa.</string>
-<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-<string>Precisamos da sua localização para registrar o local da tarefa.</string>
-```
+---
+
+## Evidências
+
+As capturas de tela ficam em [`docs/evidencias/`](docs/evidencias/). Veja o guia
+[`docs/COMO_GERAR_EVIDENCIAS.md`](docs/COMO_GERAR_EVIDENCIAS.md) para reproduzir.
 
 ---
 
 ## Autor
 
-| [<img src="https://avatars.githubusercontent.com/u/70274921?s=400&u=c1688d6fcd13223bfe1093c6d16b3b6b646545fe&v=4" width=115><br><sub>Guilherme Queiroz Ribeiro</sub>](https://github.com/GuiQueirozRibeiro) |
-| :---: |
+**Guilherme Queiroz Ribeiro** — [github.com/GuiQueirozRibeiro](https://github.com/GuiQueirozRibeiro)

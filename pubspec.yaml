@@ -16,19 +16,34 @@ dependencies:
   cupertino_icons: ^1.0.6
   intl: ^0.20.2
 
-  # Gerenciamento de estado (rubrica item 3).
+  # Gerenciamento de estado.
   provider: ^6.1.2
 
-  # GPS + permissões nativas (rubrica item 4).
+  # GPS + permissões nativas (API do aparelho).
   geolocator: ^13.0.1
 
   # Mapa OpenStreetMap (sem necessidade de API key — funciona out-of-the-box).
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
 
+  # Firebase: persistência das tarefas no Cloud Firestore.
+  firebase_core: ^3.6.0
+  cloud_firestore: ^5.4.4
+
+  # Package interno: cliente OpenWeather (API REST) + utilitários de geolocalização.
+  geo_tools:
+    path: packages/geo_tools
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Testes de interface (UI) que rodam no dispositivo/emulador.
+  integration_test:
+    sdk: flutter
+  # Firestore em memória para testar o repositório sem rede.
+  fake_cloud_firestore: ^3.1.0
+  # Mocks para os testes (ex.: WeatherClient).
+  mocktail: ^1.0.4
   flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1
 
